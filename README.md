@@ -1,84 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-
+<meta charset="UTF-8">
 <title>AutoBid Car Marketplace</title>
 
 <style>
 
 body{
-font-family:Arial;
+font-family: Arial;
 margin:0;
-background:#f2f2f2;
+background:#f4f4f4;
 }
 
 header{
-background:black;
+background:#111;
 color:white;
-padding:20px;
-text-align:center;
-}
-
-.search{
 text-align:center;
 padding:20px;
 }
 
-input{
+.search-box{
+text-align:center;
+margin:20px;
+}
+
+.search-box input{
 padding:10px;
-width:250px;
+width:300px;
+font-size:16px;
 }
 
-#cars{
+#carContainer{
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
 gap:20px;
 padding:20px;
 }
 
-.car{
+.carCard{
 background:white;
 padding:15px;
 border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 button{
-padding:8px;
-margin:5px;
+margin:5px 3px;
+padding:8px 10px;
+border:none;
+border-radius:5px;
 cursor:pointer;
+background:#222;
+color:white;
+}
+
+button:hover{
+background:#444;
 }
 
 </style>
 
 </head>
 
-
 <body>
 
 <header>
-
-<h1>🚗 AutoBid Marketplace</h1>
-<p>Buy • Sell • Bid • Book Cars</p>
-
+<h1>🚗 AutoBid Car Marketplace</h1>
+<p>Buy • Bid • Book • Service Cars</p>
 </header>
 
 
-<div class="search">
-
-<input type="text" id="search" placeholder="Search cars..." onkeyup="searchCars()">
-
+<div class="search-box">
+<input id="searchInput" placeholder="Search cars..." onkeyup="searchCars()">
 </div>
 
 
-<div id="cars"></div>
+<div id="carContainer"></div>
 
 
 <script>
 
-
-let cars=[
+let cars = [
 
 {model:"Toyota Camry",year:2022,price:27000},
 {model:"Honda Accord",year:2021,price:26000},
@@ -95,59 +98,50 @@ let cars=[
 
 
 for(let i=0;i<110;i++){
-
 cars.push({
 model:"Car Model "+(i+1),
-year:2014+(i%10),
-price:15000+(i*300)
+year:2015 + (i % 10),
+price:15000 + (i*200)
 })
-
 }
 
 
+function displayCars(list){
 
-function showCars(list){
-
-let container=document.getElementById("cars")
+let container = document.getElementById("carContainer")
 
 container.innerHTML=""
 
 list.forEach((car,index)=>{
 
-container.innerHTML+=`
+let card = document.createElement("div")
 
-<div class="car">
+card.className="carCard"
 
+card.innerHTML = `
 <h3>${car.model}</h3>
-
 <p><b>Year:</b> ${car.year}</p>
-
 <p><b>Price:</b> $${car.price}</p>
 
-<button onclick="info(${index})">Info</button>
-
-<button onclick="bid(${index})">Bid</button>
-
-<button onclick="book(${index})">Book</button>
-
-<button onclick="service(${index})">Service</button>
-
-</div>
-
+<button onclick="carInfo(${index})">Info</button>
+<button onclick="bidCar(${index})">Bid</button>
+<button onclick="bookCar(${index})">Book</button>
+<button onclick="serviceCar(${index})">Service</button>
 `
+
+container.appendChild(card)
 
 })
 
 }
 
 
-
-function info(id){
+function carInfo(id){
 
 let car=cars[id]
 
 alert(
-"Car Info\n\n"+
+"Car Information\n\n"+
 "Model: "+car.model+
 "\nYear: "+car.year+
 "\nPrice: $"+car.price
@@ -156,75 +150,57 @@ alert(
 }
 
 
+function bidCar(id){
 
-function bid(id){
+let bid = prompt("Enter your bid price")
 
-let car=cars[id]
-
-let bidPrice=prompt("Enter your bid price for "+car.model)
-
-if(bidPrice){
-
-alert("Your bid of $"+bidPrice+" was submitted!")
-
+if(bid){
+alert("Bid submitted: $"+bid)
 }
 
 }
 
 
+function bookCar(id){
 
-function book(id){
+let name = prompt("Enter your name")
 
-let name=prompt("Enter your name")
-
-let date=prompt("Enter booking date")
+let date = prompt("Booking date")
 
 if(name && date){
-
 alert("Booking confirmed for "+name+" on "+date)
-
 }
 
 }
 
 
+function serviceCar(id){
 
-function service(id){
+let service = prompt("Enter service (repair / cleaning / inspection)")
 
-let serviceType=prompt("Enter service needed (inspection / cleaning / repair)")
-
-if(serviceType){
-
-alert("Service request submitted for "+serviceType)
-
+if(service){
+alert("Service request sent: "+service)
 }
 
 }
-
 
 
 function searchCars(){
 
-let value=document.getElementById("search").value.toLowerCase()
+let value=document.getElementById("searchInput").value.toLowerCase()
 
-let filtered=cars.filter(car=>
-
+let filtered=cars.filter(car =>
 car.model.toLowerCase().includes(value)
-
 )
 
-showCars(filtered)
+displayCars(filtered)
 
 }
 
 
-
-showCars(cars)
-
+displayCars(cars)
 
 </script>
 
-
 </body>
-
 </html>
